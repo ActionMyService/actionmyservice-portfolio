@@ -2,7 +2,13 @@
 
 import { useRef, useState, useEffect, Suspense, useMemo } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Environment, RoundedBox, Text } from "@react-three/drei";
+import {
+  Float,
+  Environment,
+  RoundedBox,
+  Text,
+  Sparkles,
+} from "@react-three/drei";
 import * as THREE from "three";
 import Link from "next/link";
 import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
@@ -274,6 +280,23 @@ function Particles({ count }: { count: number }) {
     return arr;
   }, [count]);
 
+  const colors = useMemo(() => {
+    const arr = new Float32Array(count * 3);
+    const palette = [
+      new THREE.Color("#8b5cf6"),
+      new THREE.Color("#3b82f6"),
+      new THREE.Color("#ec4899"),
+      new THREE.Color("#10b981"),
+    ];
+    for (let i = 0; i < count; i++) {
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      arr[i * 3] = c.r;
+      arr[i * 3 + 1] = c.g;
+      arr[i * 3 + 2] = c.b;
+    }
+    return arr;
+  }, [count]);
+
   useFrame((state) => {
     if (!pointsRef.current) return;
     const p = scrollState.progress;
@@ -286,14 +309,16 @@ function Particles({ count }: { count: number }) {
     <points ref={pointsRef}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.025}
-        color="#8b5cf6"
+        vertexColors
         transparent
-        opacity={0.55}
+        opacity={0.6}
         sizeAttenuation
         depthWrite={false}
+        blending={THREE.AdditiveBlending}
       />
     </points>
   );
@@ -324,7 +349,13 @@ function LightRig() {
   return <pointLight ref={lightRef} position={[3, 2, 3]} intensity={40} distance={25} decay={2} color="#8b5cf6" />;
 }
 
-function Scene({ particleCount }: { particleCount: number }) {
+function Scene({
+  particleCount,
+  isLowPower,
+}: {
+  particleCount: number;
+  isLowPower: boolean;
+}) {
   return (
     <>
       <ambientLight intensity={0.45} />
@@ -375,6 +406,15 @@ function Scene({ particleCount }: { particleCount: number }) {
       />
 
       <Particles count={particleCount} />
+
+      <Sparkles
+        count={isLowPower ? 40 : 100}
+        scale={[16, 10, 8]}
+        size={3}
+        speed={0.3}
+        color="#a78bfa"
+        opacity={0.45}
+      />
 
       <Environment preset="city" />
     </>
@@ -532,7 +572,10 @@ export function Scroll3DExperience() {
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         >
           <Suspense fallback={null}>
-            <Scene particleCount={isLowPower ? 200 : 500} />
+            <Scene
+              particleCount={isLowPower ? 200 : 500}
+              isLowPower={isLowPower}
+            />
             {!reducedMotion && <CameraRig />}
           </Suspense>
         </Canvas>

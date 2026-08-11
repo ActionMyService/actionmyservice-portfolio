@@ -10,6 +10,7 @@ import {
   RoundedBox,
   Text,
   MeshDistortMaterial,
+  Sparkles as Sparkles3D,
 } from "@react-three/drei";
 import * as THREE from "three";
 import {
@@ -18,8 +19,6 @@ import {
   ZoomIn,
   ZoomOut,
   RefreshCw,
-  Box,
-  Layers,
   Sparkles,
 } from "lucide-react";
 
@@ -236,6 +235,23 @@ function ParticleField() {
     return arr;
   }, []);
 
+  const colors = useMemo(() => {
+    const arr = new Float32Array(count * 3);
+    const palette = [
+      new THREE.Color("#8b5cf6"),
+      new THREE.Color("#3b82f6"),
+      new THREE.Color("#ec4899"),
+      new THREE.Color("#10b981"),
+    ];
+    for (let i = 0; i < count; i++) {
+      const c = palette[Math.floor(Math.random() * palette.length)];
+      arr[i * 3] = c.r;
+      arr[i * 3 + 1] = c.g;
+      arr[i * 3 + 2] = c.b;
+    }
+    return arr;
+  }, []);
+
   useFrame((state) => {
     if (!pointsRef.current) return;
     const t = state.clock.getElapsedTime();
@@ -247,16 +263,65 @@ function ParticleField() {
     <points ref={pointsRef}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
-        color="#8b5cf6"
+        vertexColors
         transparent
-        opacity={0.5}
+        opacity={0.55}
         sizeAttenuation
         depthWrite={false}
+        blending={THREE.AdditiveBlending}
       />
     </points>
+  );
+}
+
+function WireframeSphere() {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
+    meshRef.current.rotation.x = t * 0.06;
+    meshRef.current.rotation.y = -t * 0.1;
+    const scale = 1 + Math.sin(t * 0.35) * 0.06;
+    meshRef.current.scale.setScalar(scale);
+  });
+
+  return (
+    <mesh ref={meshRef} position={[-3, 1.4, -1]}>
+      <icosahedronGeometry args={[0.95, 1]} />
+      <meshBasicMaterial wireframe color="#8b5cf6" transparent opacity={0.28} />
+    </mesh>
+  );
+}
+
+function GlassOrb() {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
+    meshRef.current.rotation.y = t * 0.15;
+    meshRef.current.position.y = Math.sin(t * 0.5 + 2) * 0.15;
+  });
+
+  return (
+    <mesh ref={meshRef} position={[3.1, 0.6, -0.8]}>
+      <icosahedronGeometry args={[0.7, 3]} />
+      <meshPhysicalMaterial
+        color="#38bdf8"
+        metalness={0.1}
+        roughness={0.05}
+        transmission={0.7}
+        thickness={0.5}
+        clearcoat={1}
+        clearcoatRoughness={0.05}
+        envMapIntensity={1.5}
+      />
+    </mesh>
   );
 }
 
@@ -275,6 +340,8 @@ function Scene() {
 
       <InnerRing />
       <OrbitingCubes />
+      <WireframeSphere />
+      <GlassOrb />
 
       <FloatingInterfaceCard
         position={[-2.6, 1.3, 0.4]}
@@ -310,6 +377,15 @@ function Scene() {
       />
 
       <ParticleField />
+
+      <Sparkles3D
+        count={90}
+        scale={[12, 8, 8]}
+        size={2.5}
+        speed={0.35}
+        color="#a78bfa"
+        opacity={0.45}
+      />
 
       <ContactShadows
         position={[0, -2.6, 0]}

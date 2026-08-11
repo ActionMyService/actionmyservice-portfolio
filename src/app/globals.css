@@ -18,25 +18,31 @@
   --warning: #f59e0b;
   --error: #ef4444;
   --radius: 0.5rem;
+  --glow-violet: rgba(99, 102, 241, 0.12);
+  --glow-blue: rgba(59, 130, 246, 0.08);
+  --glow-pink: rgba(236, 72, 153, 0.06);
 }
 
 .dark {
-  --background: #050505;
-  --foreground: #fafafa;
-  --card: #0d0d0d;
-  --card-foreground: #fafafa;
-  --border: #1f1f1f;
-  --muted: #a3a3a3;
-  --muted-foreground: #a1a1aa;
-  --primary: #fafafa;
+  --background: #050508;
+  --foreground: #ededf2;
+  --card: #0b0b10;
+  --card-foreground: #ededf2;
+  --border: #1a1a22;
+  --muted: #9a9aa6;
+  --muted-foreground: #9fa0ad;
+  --primary: #ededf2;
   --primary-foreground: #0a0a0a;
-  --secondary: #18181b;
-  --secondary-foreground: #fafafa;
+  --secondary: #14141b;
+  --secondary-foreground: #ededf2;
   --accent: #818cf8;
   --accent-foreground: #0a0a0a;
   --success: #4ade80;
   --warning: #fbbf24;
   --error: #f87171;
+  --glow-violet: rgba(99, 102, 241, 0.16);
+  --glow-blue: rgba(59, 130, 246, 0.1);
+  --glow-pink: rgba(236, 72, 153, 0.08);
 }
 
 @theme inline {
@@ -57,6 +63,8 @@
   --color-warning: var(--warning);
   --color-error: var(--error);
   --font-sans: var(--font-geist-sans);
+  --font-display: var(--font-manrope);
+  --font-grotesk: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -75,6 +83,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -147,6 +156,15 @@ body {
   text-wrap: pretty;
 }
 
+/* Display typography helper */
+.font-display {
+  font-family: var(--font-manrope), var(--font-geist-sans), sans-serif;
+}
+
+.font-grotesk {
+  font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
+}
+
 /* Hero gradient text */
 .gradient-text {
   background: linear-gradient(135deg, var(--foreground) 0%, var(--muted) 100%);
@@ -165,6 +183,14 @@ body {
 /* Accent gradient */
 .accent-gradient {
   background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+}
+
+/* Subtle gradient text for creative sections */
+.neon-gradient-text {
+  background: linear-gradient(135deg, #818cf8 0%, #a78bfa 40%, #e879f9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Card hover effect */
@@ -234,6 +260,20 @@ body {
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Slow spin */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
 }
 
 /* Pulse glow */
@@ -308,4 +348,74 @@ body {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Ambient glow backgrounds */
+.ambient-glow {
+  background: radial-gradient(
+      ellipse at 20% 20%,
+      var(--glow-violet) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 30%,
+      var(--glow-blue) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 50% 80%,
+      var(--glow-pink) 0%,
+      transparent 50%
+    );
+}
+
+/* Gold / premium shimmer text */
+.premium-shimmer {
+  background: linear-gradient(
+    110deg,
+    #c0b7a2 20%,
+    #f5efe0 40%,
+    #c0b7a2 60%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Section label eyebrow */
+.eyebrow-label {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* 3D canvas container polish */
+.canvas-frame {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.canvas-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  pointer-events: none;
 }
