@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { PortfolioClient } from "./portfolio-client";
 import { getAllProjects } from "@/lib/data";
+import { ThreeDWorld } from "@/components/three-d-world";
 
 export const metadata = {
   title: "Portfolio — ActionMyService",
@@ -12,9 +13,14 @@ export default async function PortfolioPage() {
   const projects = await getAllProjects();
 
   return (
-    <Suspense fallback={<PortfolioLoading />}>
-      <PortfolioClient projects={projects} />
-    </Suspense>
+    <div className="min-h-screen relative">
+      <ThreeDWorld />
+      <div className="relative z-10">
+        <Suspense fallback={<PortfolioLoading />}>
+          <PortfolioClient projects={projects} />
+        </Suspense>
+      </div>
+    </div>
   );
 }
 

@@ -7,6 +7,8 @@ import { ThreeDShowcase } from "@/components/three-d-showcase";
 import { ThreeDPortfolioPreview } from "@/components/three-d-portfolio-preview";
 import { Scroll3DExperience } from "@/components/scroll-3d-experience";
 import { HandDrawnArrow, HumanNote } from "@/components/human-touch";
+import { ThreeDWorld } from "@/components/three-d-world";
+import { LoadingScreen } from "@/components/loading-screen";
 import { getFeaturedProjects, getRecentProjects, getServices } from "@/lib/data";
 import { getCategoryLabel } from "@/lib/constants";
 
@@ -42,6 +44,8 @@ export default async function Home() {
 
   return (
     <>
+      <LoadingScreen />
+      <ThreeDWorld />
       <Hero />
 
       {/* ===== Full Scroll 3D Experience ===== */}

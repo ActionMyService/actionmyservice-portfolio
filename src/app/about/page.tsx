@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getServices, getProjectsForService } from "@/lib/data";
 import { SERVICE_SLUGS } from "@/lib/constants";
 import { CtaSection } from "@/components/cta-section";
+import { ThreeDWorld } from "@/components/three-d-world";
 
 export const metadata = {
   title: "About — ActionMyService",
@@ -23,7 +24,9 @@ export default async function AboutPage() {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <ThreeDWorld />
+      <div className="relative z-10">
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-16 md:pb-24">
         <div className="container-site">
@@ -214,6 +217,7 @@ export default async function AboutPage() {
       </section>
 
       <CtaSection />
+      </div>
     </div>
   );
 }

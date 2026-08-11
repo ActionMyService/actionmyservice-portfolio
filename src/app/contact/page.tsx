@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { Mail, Clock, MessageSquare } from "lucide-react";
 import { ContactForm } from "./contact-form";
+import { ThreeDWorld } from "@/components/three-d-world";
 
 export const metadata = {
   title: "Contact — ActionMyService",
@@ -10,7 +11,9 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative">
+      <ThreeDWorld />
+      <div className="relative z-10">
       {/* Hero */}
       <section className="pt-28 md:pt-36 pb-16 md:pb-24">
         <div className="container-site">
@@ -78,6 +81,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   );
 }
