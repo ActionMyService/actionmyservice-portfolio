@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  category        String
+  shortDescription String
+  description     String
+  client          String?
+  year            Int
+  projectDate     DateTime?
+  status          String   @default("COMPLETED")
+  duration        String?
+  thumbnail       String
+  coverImage      String
+  videoUrl        String?
+  videoThumbnail  String?
+  liveUrl         String?
+  figmaUrl        String?
+  githubUrl       String?
+  externalUrl     String?
+  challenge       String?
+  approach        String?
+  results         String?
+  deliverables    String?
+  additionalInfo  String?
+  featured        Boolean  @default(false)
+  published       Boolean  @default(true)
+  isDemo          Boolean  @default(false)
+  newBadge        Boolean  @default(false)
+  newBadgeUntil   DateTime?
+  sortOrder       Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  images          ProjectImage[]
+  features        ProjectFeature[]
+  tools           ProjectTool[]
+  technologies    ProjectTechnology[]
+  sections        ProjectSection[]
+
+  @@index([category])
+  @@index([featured])
+  @@index([published])
+}
+
+model ProjectImage {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  url       String
+  title     String?
+  alt       String?
+  sortOrder Int      @default(0)
+
+  @@index([projectId])
+}
+
+model ProjectFeature {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  feature   String
+  sortOrder Int      @default(0)
+
+  @@index([projectId])
+}
+
+model ProjectTool {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  sortOrder Int      @default(0)
+
+  @@index([projectId])
+}
+
+model ProjectTechnology {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  sortOrder Int      @default(0)
+
+  @@index([projectId])
+}
+
+model ProjectSection {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title     String
+  content   String
+  sortOrder Int      @default(0)
+
+  @@index([projectId])
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  description String
+  image       String?
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactMessage {
+  id             String   @id @default(cuid())
+  name           String
+  email          String
+  service        String
+  projectDetails String
+  budget         String?
+  attachment     String?
+  status         String   @default("NEW")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([status])
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+}
