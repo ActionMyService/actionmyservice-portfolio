@@ -1,4 +1,4 @@
-import Link from "next/link";
+ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { getServices, getProjectsForService } from "@/lib/data";

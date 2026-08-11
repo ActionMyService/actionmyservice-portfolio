@@ -19,6 +19,7 @@ import {
   ZoomIn,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ThreeDProjectPreview } from "@/components/three-d-project-preview";
 
 type ProjectImage = {
   id: string;
@@ -316,6 +317,30 @@ export function ProjectDetailClient({
                 className="w-full aspect-video"
               />
             </div>
+          </div>
+        </section>
+      )}
+
+      {/* ===== 3D INTERACTIVE PREVIEW ===== */}
+      {is3D && (
+        <section className="py-16 md:py-20">
+          <div className="container-site">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-10">
+              <div className="lg:col-span-4">
+                <p className="text-sm font-medium text-muted-foreground mb-2">3D Preview</p>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                  Interactive 3D Experience
+                </h2>
+              </div>
+              <div className="lg:col-span-8">
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  Explore this immersive 3D interface concept. Drag to rotate, scroll to zoom,
+                  and interact with the futuristic UI elements. This preview demonstrates the
+                  interactive nature of the 3D experience.
+                </p>
+              </div>
+            </div>
+            <ThreeDProjectPreview title={project.title} />
           </div>
         </section>
       )}
