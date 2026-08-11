@@ -7,18 +7,16 @@ import {
   Environment,
   ContactShadows,
   OrbitControls,
-  RoundedBox,
-  Text,
   MeshDistortMaterial,
   Sparkles,
 } from "@react-three/drei";
 import * as THREE from "three";
 import { Rotate3D, MousePointer2 } from "lucide-react";
 
-// ===== Premium 3D Hero Scene v2 =====
-// A cinematic composition with a central morphing core,
-// holographic rings, floating UI panels, particle constellations,
-// orbiting elements and premium volumetric lighting.
+// ===== Premium 3D Hero Scene v3 =====
+// ONE carefully designed 3D visual element.
+// A metallic morphing core with holographic rings.
+// Clean, cinematic, premium. No random floating objects.
 
 function MorphCore() {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -106,197 +104,9 @@ function HolographicRings() {
   );
 }
 
-function OrbitingSats() {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    const t = state.clock.getElapsedTime();
-    groupRef.current.rotation.y = t * 0.4;
-    groupRef.current.rotation.x = Math.sin(t * 0.1) * 0.1;
-  });
-
-  const satellites = useMemo(
-    () =>
-      Array.from({ length: 6 }).map((_, i) => {
-        const angle = (i / 6) * Math.PI * 2;
-        const radius = 2.8;
-        return {
-          position: [
-            Math.cos(angle) * radius,
-            Math.sin(i * 1.3) * 0.5,
-            Math.sin(angle) * radius,
-          ] as [number, number, number],
-          color: ["#8b5cf6", "#3b82f6", "#10b981", "#ec4899", "#f59e0b", "#06b6d4"][i],
-          size: 0.09 + (i % 3) * 0.02,
-        };
-      }),
-    []
-  );
-
-  return (
-    <group ref={groupRef}>
-      {satellites.map((sat, i) => (
-        <mesh key={i} position={sat.position}>
-          <boxGeometry args={[sat.size, sat.size, sat.size]} />
-          <meshStandardMaterial
-            color={sat.color}
-            emissive={sat.color}
-            emissiveIntensity={0.5}
-            metalness={0.85}
-            roughness={0.15}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
-
-function GlassSphere() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.getElapsedTime();
-    meshRef.current.rotation.y = t * 0.1;
-    meshRef.current.rotation.z = t * 0.05;
-    const scale = 1 + Math.sin(t * 0.5) * 0.06;
-    meshRef.current.scale.setScalar(scale);
-  });
-
-  return (
-    <mesh ref={meshRef} position={[2.8, 0.9, -1]}>
-      <icosahedronGeometry args={[0.75, 3]} />
-      <meshPhysicalMaterial
-        color="#38bdf8"
-        metalness={0.1}
-        roughness={0.05}
-        transmission={0.7}
-        thickness={0.6}
-        clearcoat={1}
-        clearcoatRoughness={0.05}
-        envMapIntensity={1.6}
-      />
-    </mesh>
-  );
-}
-
-function AmbientOrb() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.getElapsedTime();
-    meshRef.current.rotation.y = t * 0.3;
-    const scale = 1 + Math.sin(t * 0.7) * 0.08;
-    meshRef.current.scale.setScalar(scale);
-    meshRef.current.position.y = Math.sin(t * 0.5) * 0.1;
-  });
-
-  return (
-    <mesh ref={meshRef} position={[-2.9, -0.6, 0.5]} scale={0.5}>
-      <octahedronGeometry args={[0.5, 0]} />
-      <meshStandardMaterial
-        color="#f59e0b"
-        metalness={0.8}
-        roughness={0.15}
-        emissive="#f59e0b"
-        emissiveIntensity={0.3}
-      />
-    </mesh>
-  );
-}
-
-function FloatingUIPanel({
-  position,
-  rotation,
-  color,
-  label,
-  lines,
-  title,
-}: {
-  position: [number, number, number];
-  rotation: [number, number, number];
-  color: string;
-  label: string;
-  title: string;
-  lines: number;
-}) {
-  const groupRef = useRef<THREE.Group>(null);
-
-  useFrame((state) => {
-    if (!groupRef.current) return;
-    const t = state.clock.getElapsedTime();
-    groupRef.current.position.y = position[1] + Math.sin(t * 0.6 + position[0]) * 0.14;
-    groupRef.current.rotation.z = rotation[2] + Math.sin(t * 0.3 + position[1]) * 0.02;
-    groupRef.current.rotation.x = rotation[0] + Math.sin(t * 0.25 + position[2]) * 0.015;
-  });
-
-  return (
-    <group ref={groupRef} position={position} rotation={rotation}>
-      <RoundedBox args={[1.7, 1.2, 0.07]} radius={0.08} smoothness={6}>
-        <meshStandardMaterial
-          color="#0a0a12"
-          metalness={0.6}
-          roughness={0.2}
-          transparent
-          opacity={0.94}
-          envMapIntensity={0.8}
-        />
-      </RoundedBox>
-      {/* Panel accent bar */}
-      <mesh position={[-0.65, 0.38, 0.05]}>
-        <boxGeometry args={[0.5, 0.08, 0.01]} />
-        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.8} />
-      </mesh>
-      {/* Panel header dot */}
-      <mesh position={[-0.78, 0.42, 0.05]}>
-        <sphereGeometry args={[0.035, 16, 16]} />
-        <meshStandardMaterial color="#71717a" emissive="#71717a" emissiveIntensity={0.4} />
-      </mesh>
-      <mesh position={[-0.7, 0.42, 0.05]}>
-        <sphereGeometry args={[0.035, 16, 16]} />
-        <meshStandardMaterial color="#71717a" emissive="#71717a" emissiveIntensity={0.4} />
-      </mesh>
-      <mesh position={[-0.62, 0.42, 0.05]}>
-        <sphereGeometry args={[0.035, 16, 16]} />
-        <meshStandardMaterial color="#71717a" emissive="#71717a" emissiveIntensity={0.4} />
-      </mesh>
-      {/* Panel lines */}
-      {Array.from({ length: lines }).map((_, i) => (
-        <mesh key={i} position={[-0.55, 0.15 - i * 0.18, 0.05]}>
-          <boxGeometry args={[1.1 - i * 0.15, 0.04, 0.01]} />
-          <meshStandardMaterial color="#3f3f46" />
-        </mesh>
-      ))}
-      {/* Title */}
-      <Text
-        position={[0, -0.42, 0.06]}
-        fontSize={0.11}
-        color="#e4e4e7"
-        anchorX="center"
-        anchorY="middle"
-        fontWeight={600}
-      >
-        {title}
-      </Text>
-      {/* Label */}
-      <Text
-        position={[0, -0.55, 0.06]}
-        fontSize={0.07}
-        color={color}
-        anchorX="center"
-        anchorY="middle"
-      >
-        {label}
-      </Text>
-    </group>
-  );
-}
-
 function ParticleField() {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = 600;
+  const count = 120;
 
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
@@ -339,35 +149,15 @@ function ParticleField() {
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={0.025}
+        size={0.024}
         vertexColors
         transparent
-        opacity={0.7}
+        opacity={0.45}
         sizeAttenuation
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
     </points>
-  );
-}
-
-function WireframeIcosahedron() {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.getElapsedTime();
-    meshRef.current.rotation.x = t * 0.08;
-    meshRef.current.rotation.y = -t * 0.12;
-    const scale = 1 + Math.sin(t * 0.3) * 0.05;
-    meshRef.current.scale.setScalar(scale);
-  });
-
-  return (
-    <mesh ref={meshRef} position={[-2.7, 1.4, -0.8]}>
-      <icosahedronGeometry args={[0.85, 1]} />
-      <meshBasicMaterial wireframe color="#8b5cf6" transparent opacity={0.35} />
-    </mesh>
   );
 }
 
@@ -387,54 +177,16 @@ function Scene() {
       </Float>
 
       <HolographicRings />
-      <OrbitingSats />
-
-      <GlassSphere />
-      <AmbientOrb />
-      <WireframeIcosahedron />
-
-      <FloatingUIPanel
-        position={[-2.6, 1.4, 0.5]}
-        rotation={[0.1, 0.35, -0.15]}
-        color="#8b5cf6"
-        label="Website Development"
-        title="Nova Studio"
-        lines={3}
-      />
-      <FloatingUIPanel
-        position={[2.4, -1.2, 0.3]}
-        rotation={[-0.08, -0.28, 0.12]}
-        color="#10b981"
-        label="AI Video Creation"
-        title="Future Vision"
-        lines={2}
-      />
-      <FloatingUIPanel
-        position={[-2.0, -1.5, -0.4]}
-        rotation={[0.15, 0.22, 0.1]}
-        color="#f59e0b"
-        label="Branding"
-        title="Mono Brand"
-        lines={3}
-      />
-      <FloatingUIPanel
-        position={[2.8, 1.5, -0.6]}
-        rotation={[-0.1, -0.32, -0.08]}
-        color="#ec4899"
-        label="3D UI/UX Design"
-        title="Neo Interface"
-        lines={2}
-      />
 
       <ParticleField />
 
       <Sparkles
-        count={80}
-        scale={[10, 6, 6]}
-        size={2.5}
-        speed={0.4}
+        count={40}
+        scale={[8, 5, 5]}
+        size={2}
+        speed={0.3}
         color="#a78bfa"
-        opacity={0.5}
+        opacity={0.35}
       />
 
       <ContactShadows
