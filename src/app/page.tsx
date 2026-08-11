@@ -5,6 +5,7 @@ import { Hero } from "@/components/hero";
 import { ProjectCard } from "@/components/project-card";
 import { ThreeDShowcase } from "@/components/three-d-showcase";
 import { ThreeDPortfolioPreview } from "@/components/three-d-portfolio-preview";
+import { Scroll3DExperience } from "@/components/scroll-3d-experience";
 import { HandDrawnArrow, HumanNote } from "@/components/human-touch";
 import { getFeaturedProjects, getRecentProjects, getServices } from "@/lib/data";
 import { getCategoryLabel } from "@/lib/constants";
@@ -42,6 +43,9 @@ export default async function Home() {
   return (
     <>
       <Hero />
+
+      {/* ===== Full Scroll 3D Experience ===== */}
+      <Scroll3DExperience />
 
       {/* ===== Selected Work ===== */}
       <section className="py-24 md:py-32">
