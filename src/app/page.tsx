@@ -4,6 +4,8 @@ import { ArrowUpRight, ArrowRight, Play, Box, Sparkles, Palette, Code2, Video, W
 import { Hero } from "@/components/hero";
 import { ProjectCard } from "@/components/project-card";
 import { ThreeDShowcase } from "@/components/three-d-showcase";
+import { ThreeDPortfolioPreview } from "@/components/three-d-portfolio-preview";
+import { HandDrawnArrow, HumanNote } from "@/components/human-touch";
 import { getFeaturedProjects, getRecentProjects, getServices } from "@/lib/data";
 import { getCategoryLabel } from "@/lib/constants";
 
@@ -99,8 +101,44 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ===== Services ===== */}
+      {/* ===== Our Work in 3D ===== */}
       <section className="py-24 md:py-32 bg-card border-y border-border">
+        <div className="container-site">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <div>
+              <p className="text-sm font-medium text-accent uppercase tracking-widest mb-3">
+                Interactive Showcase
+              </p>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
+                Our Work, In 3D.
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+                Explore a selection of our projects in an interactive 3D
+                space. Drag to rotate, hover to explore.
+              </p>
+            </div>
+            <Link
+              href="/portfolio/3d-ui-ux"
+              className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            >
+              Explore 3D Work
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          <div className="relative">
+            <ThreeDPortfolioPreview />
+
+            {/* Hand-drawn arrow */}
+            <div className="absolute -top-10 -right-4 hidden xl:block text-accent/60">
+              <HandDrawnArrow className="w-20 h-10 -scale-x-100 rotate-[200deg]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== Services ===== */}
+      <section className="py-24 md:py-32">
         <div className="container-site">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
             <div>
@@ -285,6 +323,12 @@ export default async function Home() {
                 We don't just make websites. We create experiences that
                 stand out.
               </p>
+              <div className="mt-6">
+                <HumanNote>
+                  No templates. No shortcuts. Just thoughtful, hand-crafted
+                  digital work.
+                </HumanNote>
+              </div>
               <div className="mt-10 flex flex-wrap gap-4">
                 <Link
                   href="/about"
@@ -320,7 +364,10 @@ export default async function Home() {
                 Tell us what you want to create and let's turn the idea
                 into a digital experience.
               </p>
-              <div className="mt-10 flex flex-wrap justify-center gap-4">
+              <div className="relative mt-10 flex flex-wrap justify-center gap-4">
+                <div className="absolute -top-10 left-[15%] hidden md:block text-accent/50">
+                  <HandDrawnArrow className="w-16 h-8 rotate-[160deg]" />
+                </div>
                 <Link
                   href="/contact"
                   className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition-opacity"
